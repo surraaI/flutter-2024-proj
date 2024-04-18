@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:proj_1/components/my_button.dart';
-import 'package:proj_1/components/text_field.dart';
+import 'package:prsenal_health_tracker/components/my_button.dart';
+import 'package:prsenal_health_tracker/components/text_field.dart';
 
 class SignUpPage extends StatelessWidget {
   SignUpPage({super.key});

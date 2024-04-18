@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:prsenal_health_tracker/components/my_button.dart';
 import 'package:prsenal_health_tracker/components/text_field.dart';
 
-
 class AdminLogPage extends StatelessWidget {
   AdminLogPage({super.key});
 

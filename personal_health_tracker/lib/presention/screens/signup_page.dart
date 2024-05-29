@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:personal_health_tracker/presention/widgets/my_button.dart';
@@ -7,12 +6,12 @@ import 'package:personal_health_tracker/presention/widgets/text_field.dart';
 class SignUpPage extends StatelessWidget {
   SignUpPage({super.key});
 
-  // text editing controllers
+  
   final usernameController =TextEditingController();
   final emailController =TextEditingController();
   final passwordController =TextEditingController();
 
-  // sign user in method
+  
   void signUserIn(){}
 
   @override

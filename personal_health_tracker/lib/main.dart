@@ -1,21 +1,72 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:personal_health_tracker/application/auth/auth_state.dart';
+import 'package:personal_health_tracker/presention/screens/change_password_screen.dart';
+import 'package:personal_health_tracker/presention/screens/delete_account_page.dart';
 import 'package:personal_health_tracker/presention/screens/home_page.dart';
+import 'package:personal_health_tracker/presention/screens/login_page.dart';
+import 'package:personal_health_tracker/presention/screens/signup_page.dart';
 
+void main() {
+  runApp(ProviderScope(child: MyApp()));
+}
 
-void main() => runApp(const MyApp(),);
+final routerProvider = Provider<GoRouter>((ref) {
+  final authState = ref.watch(authStateNotifierProvider);
+  final initialLocation = authState.user != null ? '/home' : '/login';
 
+  return GoRouter(
+    initialLocation: initialLocation,
+    routes: [
+      GoRoute(
+        path: '/',
+        redirect: (context, state) => authState.user != null ? '/home' : '/login',
+      ),
+      GoRoute(
+        path: '/login',
+        builder: (context, state) => LoginPage(),
+      ),
+      GoRoute(
+        path: '/signup',
+        builder: (context, state) => SignUpPage(),
+      ),
+      GoRoute(
+        path: '/home',
+        builder: (context, state) => HomePage(),
+      ),
+      GoRoute(
+        path: '/change_password',
+        builder: (context, state) => ChangePasswordScreen(),
+      ),
+      GoRoute(
+        path: '/delete_account',
+        builder: (context, state) => DeleteAccountScreen(),
+      ),
+    ],
+    refreshListenable: GoRouterRefreshStream(ref.watch(authStateNotifierProvider.notifier).stream),
+  );
+});
 
-class MyApp extends StatelessWidget {
-  const MyApp ({super.key});
-
-  // This widget is the root of your application.
+class MyApp extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomePage(),
-      
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
+
+    return MaterialApp.router(
+      title: 'Personal Health Tracker',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      routerConfig: router,
     );
-  
+  }
+}
+
+class GoRouterRefreshStream extends ChangeNotifier {
+  GoRouterRefreshStream(Stream<dynamic> stream) {
+    stream.listen((event) {
+      notifyListeners();
+    });
   }
 }

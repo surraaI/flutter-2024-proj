@@ -1,6 +1,5 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:personal_health_tracker/presention/widgets/my_button.dart';
 import 'package:personal_health_tracker/presention/widgets/text_field.dart';
 
@@ -11,18 +10,18 @@ class ChangePasswordScreen extends StatelessWidget {
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
-  void changePassword() {
+  void changePassword(BuildContext context) {
     // Implement change password functionality
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 56, 41, 81),
+      backgroundColor: const Color.fromARGB(255, 56, 41, 81),
       body: Center(
         child: SingleChildScrollView(
           child: Container(
-            margin: EdgeInsets.all(20),
+            margin: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: const Color.fromARGB(255, 234, 234, 234),
@@ -43,13 +42,13 @@ class ChangePasswordScreen extends StatelessWidget {
             height: 500.0,
             child: Column(
               children: [
-                SizedBox(height: 20),
-                CircleAvatar(
+                const SizedBox(height: 20),
+                const CircleAvatar(
                   backgroundImage: AssetImage("assets/images/logo.png"),
                   radius: 30,
                 ),
-                SizedBox(height: 15),
-                Text(
+                const SizedBox(height: 15),
+                const Text(
                   "ጎመን በጤና",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -57,38 +56,38 @@ class ChangePasswordScreen extends StatelessWidget {
                     color: Color.fromARGB(255, 72, 71, 71),
                   ),
                 ),
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
                 MyTextField(
                   controller: currentPasswordController,
                   hintText: "Current Password",
                   obscureText: true,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 MyTextField(
                   controller: newPasswordController,
                   hintText: "New Password",
                   obscureText: true,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 MyTextField(
                   controller: confirmPasswordController,
                   hintText: "Confirm New Password",
                   obscureText: true,
                 ),
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
                 MyButton(
-                  onTap: changePassword,
+                  onTap: () => changePassword(context),
                   buttonText: 'Change Password',
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, '/');
+                        context.go('/login');
                       },
-                      child: Text(
+                      child: const Text(
                         "Back to Login",
                         style: TextStyle(
                           fontSize: 12,

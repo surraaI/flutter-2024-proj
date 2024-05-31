@@ -15,26 +15,26 @@ class DataTablePage extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(18.0),
             child: DataTable(
-              columnSpacing: 10.0, // Adjust the spacing between columns
+              columnSpacing: 10.0, 
               columns: [
-                DataColumn(label: Text('Date')),
-                DataColumn(label: Text('Calories')),
-                DataColumn(label: Text('Weight')),
-                DataColumn(label: Text('Height')),
-                DataColumn(label: Text('Food Type')),
-                DataColumn(label: Text('Minutes of Exercise')),
-                DataColumn(label: Text('Water Taken (in liters)')),
+                const DataColumn(label: Text('Date')),
+                const DataColumn(label: Text('Calories')),
+                const DataColumn(label: Text('Weight')),
+                const DataColumn(label: Text('Height')),
+                const DataColumn(label: Text('Food Type')),
+                const DataColumn(label: Text('Minutes of Exercise')),
+                const DataColumn(label: Text('Water Taken (in liters)')),
                 DataColumn(label: Container(width: 100.0)),
               ],
               rows: [
                 DataRow(cells: [
-                  DataCell(Text('2022-04-01')),
-                  DataCell(Text('2000')),
-                  DataCell(Text('75 kg')),
-                  DataCell(Text('175 cm')),
-                  DataCell(Text('Protein shake')),
-                  DataCell(Text('30')),
-                  DataCell(Text('2')),
+                  const DataCell(Text('2022-04-01')),
+                  const DataCell(Text('2000')),
+                  const DataCell(Text('75 kg')),
+                  const DataCell(Text('175 cm')),
+                  const DataCell(Text('Protein shake')),
+                  const DataCell(Text('30')),
+                  const DataCell(Text('2')),
                   DataCell(Container(width: 100.0)),
                 ]),
           

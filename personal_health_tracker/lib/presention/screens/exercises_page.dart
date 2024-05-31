@@ -1,7 +1,7 @@
 // lib/presention/screens/exercise_form_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:personal_health_tracker/application/auth/exercise_providers.dart';
+import 'package:personal_health_tracker/application/exercises/exercise_providers.dart';
 import 'package:personal_health_tracker/domain/exercises.dart';
 
 class ExerciseFormPage extends ConsumerStatefulWidget {

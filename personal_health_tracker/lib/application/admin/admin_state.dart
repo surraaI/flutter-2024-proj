@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:personal_health_tracker/application/auth/admin_providers.dart';
+import 'package:personal_health_tracker/application/admin/admin_providers.dart';
+import 'package:personal_health_tracker/application/auth/auth_providers.dart';
 import 'package:personal_health_tracker/domain/admin_repository.dart';
 import 'package:personal_health_tracker/domain/user.dart';
 

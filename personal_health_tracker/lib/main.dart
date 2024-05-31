@@ -7,6 +7,7 @@ import 'package:personal_health_tracker/presention/screens/delete_account_page.d
 import 'package:personal_health_tracker/presention/screens/home_page.dart';
 import 'package:personal_health_tracker/presention/screens/login_page.dart';
 import 'package:personal_health_tracker/presention/screens/signup_page.dart';
+import 'package:personal_health_tracker/presention/screens/admin_page.dart'; 
 
 void main() {
   runApp(ProviderScope(child: MyApp()));
@@ -14,14 +15,21 @@ void main() {
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateNotifierProvider);
-  final initialLocation = authState.user != null ? '/home' : '/login';
+  final initialLocation = authState.token != null
+      ? (authState.role == 'admin' ? '/admin' : '/home')
+      : '/login';
+      // print(authState.role);
+      // print(authState.token);
 
   return GoRouter(
     initialLocation: initialLocation,
+    refreshListenable:
+        GoRouterRefreshStream(ref.watch(authStateNotifierProvider.notifier).stream),
     routes: [
       GoRoute(
         path: '/',
-        redirect: (context, state) => authState.user != null ? '/home' : '/login',
+        redirect: (context, state) =>
+            authState.token != null ? (authState.role == 'admin' ? '/admin' : '/home') : '/login',
       ),
       GoRoute(
         path: '/login',
@@ -36,6 +44,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => HomePage(),
       ),
       GoRoute(
+        path: '/admin',
+        builder: (context, state) => AdminPage(), 
+      ),
+      GoRoute(
         path: '/change_password',
         builder: (context, state) => ChangePasswordScreen(),
       ),
@@ -44,7 +56,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => DeleteAccountScreen(),
       ),
     ],
-    refreshListenable: GoRouterRefreshStream(ref.watch(authStateNotifierProvider.notifier).stream),
   );
 });
 

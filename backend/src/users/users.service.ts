@@ -121,4 +121,7 @@ export class UsersService {
       return undefined;
     }
   }
+  async findAdmins(): Promise<User[]> {
+    return this.userModel.find({ roles: Role.Admin }).exec();
+  }
 }

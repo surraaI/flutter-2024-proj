@@ -25,18 +25,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   void signUserIn() async {
     final notifier = ref.read(authStateNotifierProvider.notifier);
-    await notifier.signIn(emailController.text, passwordController.text);
-
-    if (!mounted) return; // Check if the widget is still mounted
-
-    final authState = ref.read(authStateNotifierProvider);
-
-    if (authState.error != null) {
+    try {
+      final token = await notifier.signIn(emailController.text, passwordController.text);
+      if (!mounted) return;
+      context.go('/home');
+    } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to sign in: ${authState.error}')),
+        SnackBar(content: Text('Failed to sign in: ${e.toString()}')),
       );
-    } else if (authState.user != null) {
-      context.go('/home'); // Use go_router for navigation
     }
   }
 
@@ -102,7 +99,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        context.go('/signup'); // Use go_router for navigation
+                        context.go('/signup'); 
                       },
                       child: const Text(
                         "Sign Up",

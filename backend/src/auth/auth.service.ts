@@ -11,6 +11,7 @@ import { HealthRecord } from '../health-records/schemas/healthRecord.schema';
 import { User } from '../users/schemas/user.schema';
 import { UpdateUserDto } from '../users/dto/updateUserDto';
 import { HealthRecordsService } from '../health-records/health-records.service';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -74,6 +75,20 @@ export class AuthService {
   async getHealthRecordsByUserId(request: Request): Promise<HealthRecord[]> {
     return this.usersService.getRecordsByUserId(request);
   }
+  
+  async extractTokenDetails(
+    token: string,
+  ): Promise<{ id: string; roles: string[] }> {
+    const decoded = this.jwtService.decode(token) as {
+      id: string;
+      roles: string[];
+    };
+    return {
+      id: decoded.id,
+      roles: decoded.roles,
+    };
+  }
+
   private isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -104,6 +119,34 @@ export class AuthService {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    const userr = await this.usersService.createAdmin({
+      ...createUserDto,
+      password: hashedPassword,
+    });
+    const token = this.jwtService.sign({
+      id: userr.id,
+      roles: userr.roles,
+    });
+    return { token };
+  }
+
+  async createInitialAdmin(
+    createUserDto: CreateUserDto,
+  ): Promise<{ token: string }> {
+    const existingAdmins = await this.usersService.findAdmins();
+    if (existingAdmins.length > 0) {
+      throw new BadRequestException('Admin user already exists');
+    }
+
+    if (!this.isValidEmail(createUserDto.email)) {
+      throw new BadRequestException('Invalid email format');
+    }
+
+    if (!this.isValidPassword(createUserDto.password)) {
+      throw new BadRequestException('Invalid password');
+    }
+
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
     const userr = await this.usersService.createAdmin({
       ...createUserDto,
       password: hashedPassword,

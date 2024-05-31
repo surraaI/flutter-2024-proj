@@ -11,7 +11,7 @@ describe('AuthService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [UsersModule], // Add the module that contains UserModel
+      imports: [UsersModule], 
       providers: [AuthService, UsersService, JwtService, HealthRecordsService],
     }).compile();
 

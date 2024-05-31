@@ -33,7 +33,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       passwordController.text,
     );
 
-    if (!mounted) return; // Check if the widget is still mounted
+    if (!mounted) return;
 
     final authState = ref.read(authStateNotifierProvider);
 
@@ -41,8 +41,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to sign up: ${authState.error}')),
       );
-    } else if (authState.user != null) {
-      context.go('/home'); // Use go_router for navigation
+    } else if (authState.token != null) {
+      context.go('/home');
     }
   }
 
@@ -121,7 +121,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        context.go('/login'); // Use go_router for navigation
+                        context.go('/login');
                       },
                       child: const Text(
                         "Login",

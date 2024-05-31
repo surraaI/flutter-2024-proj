@@ -16,7 +16,7 @@ export class User extends Document {
   @Prop()
   password: string;
 
-  @Prop({ default: [Role.User] }) // Assign "user" role by default
+  @Prop({ default: [Role.User] }) 
   roles: Role[];
 
   @Prop({ type: [HealthRecord], default: [] })

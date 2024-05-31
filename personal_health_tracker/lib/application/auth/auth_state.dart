@@ -73,8 +73,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       final token = await authRepository.signUp(fullname, email, password);
       await TokenStorage.storeToken(token);
       final decodedPayload = decodeJWT(token);
-      
-      final role = decodedPayload['roles'];
+      final role = decodedPayload['roles'][0];
       state = state.copyWith(isLoading: false, token: token, role: role, error: null);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
@@ -85,6 +84,27 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(isLoading: true, error: null);
     try {
       await authRepository.signOut();
+      await TokenStorage.clearToken();
+      state = AuthState(isLoading: false, token: null, error: null);
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+    }
+  }
+
+  Future<void> changePassword(String currentPassword, String newPassword) async {
+    state = state.copyWith(isLoading: true, error: null);
+    try {
+      await authRepository.changePassword(currentPassword, newPassword);
+      state = state.copyWith(isLoading: false, error: null);
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+    }
+  }
+
+Future<void> deleteAccount(String password) async {
+    state = state.copyWith(isLoading: true, error: null);
+    try {
+      await authRepository.deleteAccount(password);
       await TokenStorage.clearToken();
       state = AuthState(isLoading: false, token: null, error: null);
     } catch (e) {

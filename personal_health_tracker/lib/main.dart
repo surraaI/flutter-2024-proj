@@ -6,6 +6,7 @@ import 'package:personal_health_tracker/presention/screens/change_password_scree
 import 'package:personal_health_tracker/presention/screens/delete_account_page.dart';
 import 'package:personal_health_tracker/presention/screens/home_page.dart';
 import 'package:personal_health_tracker/presention/screens/login_page.dart';
+import 'package:personal_health_tracker/presention/screens/profile_page.dart';
 import 'package:personal_health_tracker/presention/screens/signup_page.dart';
 import 'package:personal_health_tracker/presention/screens/admin_page.dart'; 
 
@@ -54,6 +55,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/delete_account',
         builder: (context, state) => DeleteAccountScreen(),
+      ),
+      GoRoute(
+        path: '/profile',
+        builder: (context, state) => ProfilePage(),
       ),
     ],
   );

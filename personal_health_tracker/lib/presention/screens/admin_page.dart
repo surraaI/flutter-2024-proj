@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:personal_health_tracker/application/auth/admin_state.dart';
+import 'package:personal_health_tracker/application/admin/admin_state.dart';
 import 'package:personal_health_tracker/presention/widgets/my_button.dart';
 import 'package:personal_health_tracker/presention/widgets/text_field.dart';
 class AdminPage extends ConsumerStatefulWidget {

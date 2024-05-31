@@ -11,6 +11,7 @@ import { HealthRecord } from '../health-records/schemas/healthRecord.schema';
 import { User } from '../users/schemas/user.schema';
 import { UpdateUserDto } from '../users/dto/updateUserDto';
 import { HealthRecordsService } from '../health-records/health-records.service';
+import { jwtConstants } from './constants';
 
 @Injectable()
 export class AuthService {
@@ -75,7 +76,7 @@ export class AuthService {
   async getHealthRecordsByUserId(request: Request): Promise<HealthRecord[]> {
     return this.usersService.getRecordsByUserId(request);
   }
-  
+
   async extractTokenDetails(
     token: string,
   ): Promise<{ id: string; roles: string[] }> {
@@ -156,5 +157,65 @@ export class AuthService {
       roles: userr.roles,
     });
     return { token };
+  }
+
+  async changePassword(
+    userId: string,
+    changePasswordDto: { currentPassword: string; newPassword: string },
+  ): Promise<void> {
+    const { currentPassword, newPassword } = changePasswordDto;
+    const user = await this.usersService.findById(userId);
+
+    if (!user || !(await bcrypt.compare(currentPassword, user.password))) {
+      throw new UnauthorizedException('Current password is incorrect');
+    }
+
+    if (!this.isValidPassword(newPassword)) {
+      throw new BadRequestException('Invalid new password');
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    await this.usersService.updateUser(userId, user);
+  }
+  async validatePassword(
+    plainPassword: string,
+    hashedPassword: string,
+  ): Promise<boolean> {
+    return bcrypt.compare(plainPassword, hashedPassword);
+  }
+
+  async deleteAccount(request: Request, password: string): Promise<void> {
+    const token = this.extractTokenFromRequest(request);
+    const userId = this.extractUserIdFromToken(token);
+
+    const user = await this.usersService.findById(userId);
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+    if (!(await this.validatePassword(password, user.password))) {
+      throw new UnauthorizedException('Invalid password');
+    }
+    await this.usersService.deleteUser(userId);
+  }
+
+  private extractTokenFromRequest(request: Request): string | undefined {
+    const authorizationHeader = request.headers['authorization'];
+    if (authorizationHeader && authorizationHeader.startsWith('Bearer ')) {
+      return authorizationHeader.substring('Bearer '.length);
+    }
+    return undefined;
+  }
+
+  private extractUserIdFromToken(token: string): string | undefined {
+    try {
+      const decodedToken = this.jwtService.verify(token, {
+        secret: jwtConstants.secret,
+      }) as {
+        sub: string;
+      };
+      return decodedToken.sub;
+    } catch (error) {
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 }

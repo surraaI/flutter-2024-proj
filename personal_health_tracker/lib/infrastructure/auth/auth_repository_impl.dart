@@ -47,6 +47,42 @@ class AuthRepositoryImpl implements AuthRepository {
       final error = jsonDecode(response.body)['message'] ?? 'Failed to sign up';
       throw Exception(error);
     }
+    
+  }
+  @override
+  Future<void> changePassword(String currentPassword, String newPassword) async {
+    final token = await TokenStorage.getToken();
+    final response = await client.put(
+      Uri.parse('$baseUrl/auth/changePassword'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode({
+        'currentPassword': currentPassword,
+        'newPassword': newPassword,
+      }),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to change password');
+    }
+  }
+
+  @override
+  Future<void> deleteAccount(String password) async {
+    final requestBody = jsonEncode({'password': password});
+
+    final response = await client.delete(
+      Uri.parse('$baseUrl/auth/deleteAccount'),
+      headers: {'Content-Type': 'application/json'},
+      body: requestBody,
+    );
+
+    if (response.statusCode != 200) {
+      final error = jsonDecode(response.body)['message'] ?? 'Failed to delete account';
+      throw Exception(error);
+    }
   }
 
   @override

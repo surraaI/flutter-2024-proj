@@ -26,13 +26,9 @@ export class HealthRecord extends Document {
 
   @Prop()
   @IsNumber()
-  minutesOfExercise: number;
-
-  @Prop()
-  @IsNumber()
   amountOfWaterTaken: number;
 
-  @Prop({ default: Date.now }) // Set default value to the current date
+  @Prop({ default: Date.now })
   @IsDate()
   date: Date;
 }

@@ -67,6 +67,12 @@ export class AuthController {
     return this.authService.deleteAllUsers();
   }
 
+  @UseGuards(AuthGuard)
+  @Delete('deleteAccount')
+  deleteAccount(@Request() req, @Body() body: { password: string }) {
+    return this.authService.deleteAccount(req, body.password);
+  }
+  
   @Roles(Role.Admin)
   @UseGuards(RolesGuard)
   @Post('createAdmin')
@@ -80,14 +86,17 @@ export class AuthController {
     return this.authService.getHealthRecordsByUserId(request);
   }
 
-  @Get('current_user')
-  async getTokenDetails(@Req() request) {
-    const token = request.headers.authorization.split(' ')[1];
-    return this.authService.extractTokenDetails(token);
-  }
-
   @Post('create-initial-admin')
   async createInitialAdmin(@Body() createUserDto: CreateUserDto) {
     return await this.authService.createInitialAdmin(createUserDto);
+  }
+
+  @UseGuards(AuthGuard)
+  @Put('changePassword')
+  async changePassword(
+    @Req() request,
+    @Body() changePasswordDto: { currentPassword: string; newPassword: string },
+  ) {
+    return this.authService.changePassword(request.user.id, changePasswordDto);
   }
 }

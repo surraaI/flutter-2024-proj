@@ -14,8 +14,5 @@ export class CreateHealthRecordDto {
   height: number;
 
   @IsNumber()
-  minutes_of_exercise: number;
-
-  @IsNumber()
   amount_of_water_taker: number;
 }

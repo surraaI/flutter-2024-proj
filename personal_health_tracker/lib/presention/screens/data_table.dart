@@ -22,8 +22,7 @@ class DataTablePage extends StatelessWidget {
                 const DataColumn(label: Text('Weight')),
                 const DataColumn(label: Text('Height')),
                 const DataColumn(label: Text('Food Type')),
-                const DataColumn(label: Text('Minutes of Exercise')),
-                const DataColumn(label: Text('Water Taken (in liters)')),
+                const DataColumn(label: Text('WaterTaken(liters)')),
                 DataColumn(label: Container(width: 100.0)),
               ],
               rows: [

@@ -1,21 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:personal_health_tracker/application/auth/auth_state.dart';
 import 'package:personal_health_tracker/presention/widgets/my_button.dart';
 import 'package:personal_health_tracker/presention/widgets/text_field.dart';
 
-class ChangePasswordScreen extends StatelessWidget {
-  ChangePasswordScreen({super.key});
-
-  final currentPasswordController = TextEditingController();
-  final newPasswordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
-
-  void changePassword(BuildContext context) {
-    // Implement change password functionality
-  }
+class ChangePasswordScreen extends ConsumerWidget {
+  const ChangePasswordScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentPasswordController = TextEditingController();
+    final newPasswordController = TextEditingController();
+    final confirmPasswordController = TextEditingController();
+
+    void changePassword(BuildContext context) async {
+      final currentPassword = currentPasswordController.text;
+      final newPassword = newPasswordController.text;
+      final confirmPassword = confirmPasswordController.text;
+
+      if (newPassword != confirmPassword) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Passwords do not match')),
+        );
+        return;
+      }
+
+      try {
+        await ref.read(authStateNotifierProvider.notifier).changePassword(currentPassword, newPassword);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Password changed successfully')),
+        );
+        context.go('/login');
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to change password: $e')),
+        );
+      }
+    }
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 56, 41, 81),
       body: Center(
@@ -76,7 +99,9 @@ class ChangePasswordScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 50),
                 MyButton(
-                  onTap: () => changePassword(context),
+                  onTap: () {
+                    changePassword(context);
+                  },
                   buttonText: 'Change Password',
                 ),
                 const SizedBox(height: 10),

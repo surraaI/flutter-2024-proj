@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:personal_health_tracker/presention/screens/provider/dataProvider.dart';
+import 'package:personal_health_tracker/application/provider/dataProvider.dart';
 
 class DataTablePage extends ConsumerStatefulWidget {
   const DataTablePage({Key? key}) : super(key: key);
